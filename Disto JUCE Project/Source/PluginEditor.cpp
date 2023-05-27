@@ -13,28 +13,37 @@
 OversampledDistortionAudioProcessorEditor::OversampledDistortionAudioProcessorEditor (OversampledDistortionAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (500, 500);
+    setResizable(true, true);
 }
 
 OversampledDistortionAudioProcessorEditor::~OversampledDistortionAudioProcessorEditor()
 {
+    
 }
 
 //==============================================================================
 void OversampledDistortionAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
+    // Background gradient
+    juce::Rectangle <int> const bounds = getLocalBounds();
+    g.setGradientFill(backgroundGradient);
+    g.fillRect(bounds);
+    
+    // Title
     g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setFont (getHeight()/12);
+    g.drawFittedText ("Distortion", getLocalBounds(), juce::Justification::centredTop, 1);
+    
+    
 }
+
 
 void OversampledDistortionAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    // Gradient colors
+    auto color1 = juce::Colour(194, 109, 222); // pink
+    auto color2 = juce::Colour(147, 238, 229); // sky blue
+    backgroundGradient = juce::ColourGradient(color1, 0, 0, color2, this->getRight(), this->getBottom(), false);
+    backgroundGradient.addColour(0.3f, color1);
 }
