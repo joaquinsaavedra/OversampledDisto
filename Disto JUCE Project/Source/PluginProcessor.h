@@ -57,6 +57,32 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    
+    // pre gain
+    juce::dsp::Gain<float> preGainProcessor;
+    
+    //distortion
+    struct myDistoFunction
+    {
+        float operator()(float x)const
+        {
+//            return juce::jlimit(-1.0f, 1.0f, x); // use hard clip [-1,1] as clipping function
+            return std::tanh(x); // use tanh as clipping function
+        }
+    };
+
+    juce::dsp::WaveShaper<float, myDistoFunction> distortionProcessor;
+    
+
+    // oversampling
+    size_t factor {4}; // 0 (no oversampling), 1 (x2), 2 (x4), 3 (x8), 4 (x16)
+
+    juce::dsp::Oversampling<float> oversampler { /*numChannels*/ 2, factor, juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR, true, true };
+    
+    //
+    
+    friend class OversampledDistortionAudioProcessorEditor;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OversampledDistortionAudioProcessor)
 };

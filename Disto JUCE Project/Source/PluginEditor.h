@@ -11,6 +11,17 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+class ImageSliderLNF : public juce::LookAndFeel_V4
+{
+public:
+
+    ImageSliderLNF();
+    
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override;
+
+    juce::Image image;
+};
+
 //==============================================================================
 /**
 */
@@ -31,5 +42,10 @@ private:
     
     juce::ColourGradient backgroundGradient;
 
+    // slider
+    ImageSliderLNF sliderLNF;
+
+    juce::Slider preGainSlider;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OversampledDistortionAudioProcessorEditor)
 };
